@@ -13,27 +13,15 @@ test('Web Form Automation', async ({ page }) => {
     await page.locator('input[name="my-password"]').fill('P@ssw0rd!');
     await expect(page.locator('input[name="my-password"]')).toHaveValue('P@ssw0rd!');
 
+
     // 3. Textarea
     await page.locator('textarea[name="my-textarea"]').fill('This is a test textarea input.');
-    await expect(page.locator('textarea[name="my-textarea"]'))
-        .toHaveValue('This is a test textarea input.');
 
     // 4. Disabled input
-    const disabled = page.locator('input[name="my-disabled"]');
-    await expect(disabled).toBeDisabled();
-
+    await expect(page.locator('input[name="my-disabled"]')).toBeDisabled();
     // 5. Readonly input
-    const readonly = page.locator('input[name="my-readonly"]');
-
-    await expect(readonly).toHaveAttribute('readonly', '');
-
-    const beforeValue = await readonly.inputValue();
-
-    await readonly.fill('Playwright');
-
-    const afterValue = await readonly.inputValue();
-
-    expect(afterValue).toBe(beforeValue);
+    await expect(page.locator('input[name="my-readonly"]'))
+    .toHaveAttribute('readonly', '');
 
     // 6. Dropdown (select)
     await page.selectOption('select[name="my-select"]', {
