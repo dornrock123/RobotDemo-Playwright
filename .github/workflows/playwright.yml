@@ -30,6 +30,7 @@ on:
         options:
           - all
           - webform
+          - test-testsuite
 
 jobs:
   test:
