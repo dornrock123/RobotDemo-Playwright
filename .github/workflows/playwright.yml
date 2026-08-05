@@ -22,6 +22,15 @@ on:
           - firefox
           - webkit
 
+      test_suite:
+        description: "Select Test Suite"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - webform
+
 jobs:
   test:
     timeout-minutes: 60
@@ -45,10 +54,18 @@ jobs:
       - name: Run Playwright Tests
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "Running on ${{ github.event.inputs.browser }}"
-            npx playwright test --project=${{ github.event.inputs.browser }}
+
+            echo "Browser : ${{ github.event.inputs.browser }}"
+            echo "Suite   : ${{ github.event.inputs.test_suite }}"
+
+            if [ "${{ github.event.inputs.test_suite }}" = "webform" ]; then
+              npx playwright test tests/webform.spec.ts --project=${{ github.event.inputs.browser }}
+            else
+              npx playwright test --project=${{ github.event.inputs.browser }}
+            fi
+
           else
-            echo "Running on chromium"
+            echo "Running all tests on chromium"
             npx playwright test --project=chromium
           fi
 
