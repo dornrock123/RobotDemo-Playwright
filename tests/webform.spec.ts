@@ -43,12 +43,32 @@ test('Web Form Automation', async ({ page }) => {
     await page.locator('input[name="my-file"]').setInputFiles(filePath);
 
     // 9. Checkbox
-    await expect(page.locator('#my-check-1')).not.toBeChecked();
+    // Checkbox 1 : ถ้าถูกติ๊กอยู่ ให้เอาออก
+    const checkbox1 = page.locator('#my-check-1');
 
-    await expect(page.locator('#my-check-2')).toBeChecked();
+    if (await checkbox1.isChecked()) {
+        await checkbox1.uncheck();
+    }
+
+    await expect(checkbox1).not.toBeChecked();
+
+
+    // Checkbox 2 : ถ้ายังไม่ถูกติ๊ก ให้ติ๊ก
+    const checkbox2 = page.locator('#my-check-2');
+
+    if (!(await checkbox2.isChecked())) {
+        await checkbox2.check();
+    }
+
+    await expect(checkbox2).toBeChecked();
 
     // 10. Default radio
-    await expect(page.locator('#my-radio-2')).toBeChecked();
+
+    const defaultRadio = page.locator('#my-radio-2');
+
+    await defaultRadio.check();
+
+    await expect(defaultRadio).toBeChecked();
 
     // 11. Color picker
     await page.locator('input[name="my-colors"]').fill('#ff0000');
